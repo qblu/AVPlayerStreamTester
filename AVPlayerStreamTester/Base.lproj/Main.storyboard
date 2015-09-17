@@ -1,13 +1,24 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6211" systemVersion="14A298i" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="8191" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6204"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
+        <!--AV Player View Controller-->
+        <scene sceneID="LzG-Wb-YGq">
+            <objects>
+                <avPlayerViewController videoGravity="AVLayerVideoGravityResizeAspect" id="ByB-Z4-8oM" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="BJz-NI-5C7" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="831" y="565"/>
+        </scene>
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="AVPlayerStreamTester" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
@@ -15,11 +26,74 @@
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <subviews>
+                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tN7-fq-tSG">
+                                <rect key="frame" x="20" y="20" width="560" height="315"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="tN7-fq-tSG" secondAttribute="height" multiplier="16:9" id="Oz8-pv-56y"/>
+                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="500" id="Zx6-9W-x6V"/>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="120" id="nry-Xg-GwI"/>
+                                </constraints>
+                                <connections>
+                                    <segue destination="ByB-Z4-8oM" kind="embed" identifier="embedAVPlayer" id="PEe-hI-NiH"/>
+                                </connections>
+                            </containerView>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="L9w-ZW-KH8">
+                                <rect key="frame" x="20" y="376" width="560" height="30"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="stream url" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aVs-25-AVP">
+                                <rect key="frame" x="20" y="351" width="560" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="0.60000002384185791" green="0.40000000596046448" blue="0.20000000298023224" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MAC-97-IVZ">
+                                <rect key="frame" x="20" y="414" width="560" height="30"/>
+                                <color key="backgroundColor" red="0.60000002379999995" green="0.40000000600000002" blue="0.20000000300000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <state key="normal" title="Load Stream"/>
+                                <connections>
+                                    <action selector="loadStreamButtonTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="0s4-YH-5wp"/>
+                                </connections>
+                            </button>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="Yhv-65-Pdt">
+                                <rect key="frame" x="20" y="452" width="560" height="140"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="L9w-ZW-KH8" firstAttribute="top" secondItem="tN7-fq-tSG" secondAttribute="bottom" constant="41" id="1oo-mv-cqp"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="tN7-fq-tSG" secondAttribute="trailing" priority="500" id="4mh-BD-MIO"/>
+                            <constraint firstItem="L9w-ZW-KH8" firstAttribute="width" secondItem="tN7-fq-tSG" secondAttribute="width" id="Av2-nx-M9p"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="Yhv-65-Pdt" secondAttribute="bottom" constant="8" id="DJZ-7j-0qd"/>
+                            <constraint firstItem="MAC-97-IVZ" firstAttribute="centerX" secondItem="aVs-25-AVP" secondAttribute="centerX" id="EMX-kP-yng"/>
+                            <constraint firstItem="tN7-fq-tSG" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="GMf-2x-9Jp"/>
+                            <constraint firstItem="Yhv-65-Pdt" firstAttribute="centerX" secondItem="MAC-97-IVZ" secondAttribute="centerX" id="JBS-IF-vgF"/>
+                            <constraint firstItem="aVs-25-AVP" firstAttribute="width" secondItem="tN7-fq-tSG" secondAttribute="width" id="KdI-WV-qUV"/>
+                            <constraint firstItem="Yhv-65-Pdt" firstAttribute="top" secondItem="MAC-97-IVZ" secondAttribute="bottom" constant="8" id="R4d-xL-sM3"/>
+                            <constraint firstAttribute="trailingMargin" relation="greaterThanOrEqual" secondItem="tN7-fq-tSG" secondAttribute="trailing" priority="600" id="VMR-Lc-iWp"/>
+                            <constraint firstItem="L9w-ZW-KH8" firstAttribute="top" secondItem="aVs-25-AVP" secondAttribute="bottom" constant="4" id="XLt-Lt-GKQ"/>
+                            <constraint firstItem="aVs-25-AVP" firstAttribute="centerX" secondItem="tN7-fq-tSG" secondAttribute="centerX" id="Zhh-8E-yHJ"/>
+                            <constraint firstItem="Yhv-65-Pdt" firstAttribute="width" secondItem="MAC-97-IVZ" secondAttribute="width" id="eRr-ER-jBu"/>
+                            <constraint firstAttribute="leadingMargin" secondItem="tN7-fq-tSG" secondAttribute="leading" priority="500" id="g3d-aL-Ykx"/>
+                            <constraint firstItem="L9w-ZW-KH8" firstAttribute="centerX" secondItem="tN7-fq-tSG" secondAttribute="centerX" id="lLi-Wy-3Xb"/>
+                            <constraint firstAttribute="leadingMargin" relation="greaterThanOrEqual" secondItem="tN7-fq-tSG" secondAttribute="leading" priority="600" id="ngf-iY-uyq"/>
+                            <constraint firstItem="MAC-97-IVZ" firstAttribute="top" secondItem="aVs-25-AVP" secondAttribute="bottom" constant="42" id="sbO-sH-5W5"/>
+                            <constraint firstItem="MAC-97-IVZ" firstAttribute="width" secondItem="aVs-25-AVP" secondAttribute="width" id="son-Kb-r78"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="infoTextView" destination="Yhv-65-Pdt" id="ggl-jn-RLb"/>
+                        <outlet property="streamUrlTextField" destination="L9w-ZW-KH8" id="XRZ-bc-CHQ"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="52" y="391"/>
         </scene>
     </scenes>
 </document>

@@ -399,6 +399,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = AVPlayerStreamTester/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.levous.AVPlayerStreamTester;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -410,6 +411,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = AVPlayerStreamTester/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.levous.AVPlayerStreamTester;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -483,6 +485,7 @@
 				FB734B201BA9AE0300950A69 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		FB734B211BA9AE0300950A69 /* Build configuration list for PBXNativeTarget "AVPlayerStreamTesterTests" */ = {
 			isa = XCConfigurationList;
@@ -491,6 +494,7 @@
 				FB734B231BA9AE0300950A69 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		FB734B241BA9AE0300950A69 /* Build configuration list for PBXNativeTarget "AVPlayerStreamTesterUITests" */ = {
 			isa = XCConfigurationList;
@@ -499,6 +503,7 @@
 				FB734B261BA9AE0300950A69 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
