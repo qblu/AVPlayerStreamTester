@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		FB5947841BAC4E6600553E4C /* CachingAVAssetResourceLoaderDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB5947831BAC4E6600553E4C /* CachingAVAssetResourceLoaderDelegate.swift */; settings = {ASSET_TAGS = (); }; };
 		FB734AFA1BA9AE0300950A69 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB734AF91BA9AE0300950A69 /* AppDelegate.swift */; };
 		FB734AFC1BA9AE0300950A69 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB734AFB1BA9AE0300950A69 /* ViewController.swift */; };
 		FB734AFF1BA9AE0300950A69 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FB734AFD1BA9AE0300950A69 /* Main.storyboard */; };
@@ -34,6 +35,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		FB5947831BAC4E6600553E4C /* CachingAVAssetResourceLoaderDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CachingAVAssetResourceLoaderDelegate.swift; sourceTree = "<group>"; };
 		FB734AF61BA9AE0300950A69 /* AVPlayerStreamTester.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AVPlayerStreamTester.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FB734AF91BA9AE0300950A69 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		FB734AFB1BA9AE0300950A69 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -74,6 +76,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		FB5947821BAC4DE600553E4C /* Caching */ = {
+			isa = PBXGroup;
+			children = (
+				FB5947831BAC4E6600553E4C /* CachingAVAssetResourceLoaderDelegate.swift */,
+			);
+			path = Caching;
+			sourceTree = "<group>";
+		};
 		FB734AED1BA9AE0300950A69 = {
 			isa = PBXGroup;
 			children = (
@@ -97,6 +107,7 @@
 		FB734AF81BA9AE0300950A69 /* AVPlayerStreamTester */ = {
 			isa = PBXGroup;
 			children = (
+				FB5947821BAC4DE600553E4C /* Caching */,
 				FB734AF91BA9AE0300950A69 /* AppDelegate.swift */,
 				FB734AFB1BA9AE0300950A69 /* ViewController.swift */,
 				FB734AFD1BA9AE0300950A69 /* Main.storyboard */,
@@ -257,6 +268,7 @@
 			files = (
 				FB734AFC1BA9AE0300950A69 /* ViewController.swift in Sources */,
 				FB734AFA1BA9AE0300950A69 /* AppDelegate.swift in Sources */,
+				FB5947841BAC4E6600553E4C /* CachingAVAssetResourceLoaderDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
