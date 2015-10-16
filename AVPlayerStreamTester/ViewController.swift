@@ -20,6 +20,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var streamUrlTextField: UITextField!
     @IBOutlet weak var infoTextView: UITextView!
     var avPlayerViewController: AVPlayerViewController?
+    let resourceLoader = After6AVAssetresourceLoaderDelagate()
 
     var streamURL: NSURL?
     let userDefaultsKeyStream = "testStreamURL"
@@ -35,9 +36,7 @@ class ViewController: UIViewController {
                 
             }
         }
-        
     }
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,7 +45,6 @@ class ViewController: UIViewController {
             streamURL = lastLoadedStream
         } else {
             streamURL = NSURL(string: "http://devimages.apple.com/iphone/samples/bipbop/bipbopall.m3u8")
-            
         }
         
         streamUrlTextField.text = streamURL?.absoluteString
@@ -77,7 +75,10 @@ class ViewController: UIViewController {
     }
     
     func startAVPlayerWithURL(url:NSURL) {
-        avPlayerViewController!.player = AVPlayer(URL: url)
+        let asset = AVURLAsset(URL: url)
+        asset.resourceLoader.setDelegate(resourceLoader, queue:dispatch_get_main_queue())
+        let playerItem = AVPlayerItem(asset: asset)
+        avPlayerViewController!.player = AVPlayer(playerItem: playerItem)
     }
 }
 

@@ -15,16 +15,16 @@ import MobileCoreServices
 class After6AVAssetresourceLoaderDelagate: NSObject {
     
     var assetData = NSMutableData()
-    var connection: NSURLConnection? //TODO: should this really be optional?
+    var connection: NSURLConnection?
     var response: NSHTTPURLResponse?
     var pendingRequests = [AVAssetResourceLoadingRequest]()
-    
+    let requestQueue = dispatch_queue_create("After6AVAssetresourceLoaderDelagate loader", nil)
     func processPendingRequests() {
     
         var requestsCompleted = [AVAssetResourceLoadingRequest]()
     
         for loadingRequest in self.pendingRequests {
-            //NOTE:                                         is that syntactically correct ?!
+            
             guard let contentInformationrequest = loadingRequest.contentInformationRequest else {
                 // loading request did not provide expected information
                 // TODO: log this
@@ -67,6 +67,25 @@ class After6AVAssetresourceLoaderDelagate: NSObject {
         contentInformationRequest.contentLength = response.expectedContentLength
     }
     
+    //TODO: refactor to result type
+    func respondWithDataForRequest(dataRequest: AVAssetResourceLoadingDataRequest) -> Bool {
+        let startOffset: Int64 = (dataRequest.currentOffset == 0) ? dataRequest.requestedOffset : dataRequest.currentOffset
+        let assetDataLength = Int64(assetData.length) // NSMutableData.length is NSUInteger and is a 64 bit int for 64 bit apps
+        if (assetDataLength < startOffset) {
+            return false
+        }
+        
+        // no longer necessary to copute a range?
+        // total data from startOffset to currently downloaded
+        //let unreadBytes = assetDataLength - startOffset
+        // let numberOfBytesToRespondWith = min(Int64(dataRequest.requestedLength), unreadBytes)
+        dataRequest.respondWithData(assetData) //, subdataWithRange:NSMakeRange(startOffset, numberOfBytesToRespondWith))
+        let endOffset = startOffset + dataRequest.requestedLength
+        let didRespondFully = Int64(assetData.length) >= endOffset
+        
+        return didRespondFully
+    }
+    
     
     //MARK: - KVO
     override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
@@ -79,29 +98,11 @@ class After6AVAssetresourceLoaderDelagate: NSObject {
 
 extension After6AVAssetresourceLoaderDelagate: AVAssetResourceLoaderDelegate {
 
-    //TODO: refactor to result type
-    func respondWithDataForRequest(dataRequest: AVAssetResourceLoadingDataRequest) -> Bool {
-        let startOffset: Int64 = (dataRequest.currentOffset == 0) ? dataRequest.requestedOffset : dataRequest.currentOffset
-        let assetDataLength = Int64(assetData.length) // NSMutableData.length is NSUInteger and is a 64 bit int for 64 bit apps
-        if (assetDataLength < startOffset) {
-            return false
-        }
-    
-        // no longer necessary to copute a range?
-        // total data from startOffset to currently downloaded
-        //let unreadBytes = assetDataLength - startOffset
-        // let numberOfBytesToRespondWith = min(Int64(dataRequest.requestedLength), unreadBytes)
-        dataRequest.respondWithData(assetData) //, subdataWithRange:NSMakeRange(startOffset, numberOfBytesToRespondWith))
-        let endOffset = startOffset + dataRequest.requestedLength
-        let didRespondFully = Int64(assetData.length) >= endOffset
-        return didRespondFully
-    }
     
     
-    func resourceLoader(resourceLoader: AVAssetResourceLoader, shouldWaitForLoadingOfRequest loadingRequest: AVAssetResourceLoadingRequest) -> Bool {
-        guard let _ = connection else {
-            //TODO: asserts might be a little too aggressive.  If something goes bad on one video URL, we should not crash the app but show a failed download and log
-            assert(loadingRequest.request.URL != nil, "loadingRequest.request.URL cannot be nil")
+    func resourceLoader(resourceLoader: AVAssetResourceLoader, shouldWaitForLoadingOfRequestedResource loadingRequest: AVAssetResourceLoadingRequest) -> Bool {
+        assert(loadingRequest.request.URL != nil, "loadingRequest.request.URL cannot be nil")
+        if connection == nil {
             let interceptedURL = loadingRequest.request.URL!
             let urlComponents = NSURLComponents(URL: interceptedURL, resolvingAgainstBaseURL:false)!
             urlComponents.scheme = "http"
@@ -114,7 +115,12 @@ extension After6AVAssetresourceLoaderDelagate: AVAssetResourceLoaderDelegate {
         }
     
         pendingRequests.append(loadingRequest)
-    
+        
+        dispatch_async(dispatch_get_main_queue()) {
+            // ensure next queued request gets processed if last run has completed
+            self.processPendingRequests()
+        }
+        
         return true
     }
     
@@ -145,8 +151,17 @@ extension After6AVAssetresourceLoaderDelagate: NSURLConnectionDataDelegate {
     
         //TODO: this is likely not going to work.  The HLS files live in a directory on S3 with matching file names between assets
         let fileName = connection.currentRequest.URL!.lastPathComponent!
-        let cachedFileURL = NSURL(fileURLWithPath: NSTemporaryDirectory()).URLByAppendingPathComponent("asset-cache").URLByAppendingPathComponent(fileName)
+        let cacheDirectoryURL = NSURL(fileURLWithPath: NSTemporaryDirectory()).URLByAppendingPathComponent("asset-cache", isDirectory: true)
         do {
+            try NSFileManager().createDirectoryAtURL(cacheDirectoryURL, withIntermediateDirectories: true, attributes: nil)
+        } catch(let error) {
+            // nothing
+            print(error)
+        }
+        
+        let cachedFileURL = cacheDirectoryURL.URLByAppendingPathComponent(fileName, isDirectory: false)
+        do {
+            let stringVal = String(data: assetData, encoding: NSUTF8StringEncoding)
             try self.assetData.writeToURL(cachedFileURL, options: .DataWritingAtomic)
         }
         catch let error as NSError {
